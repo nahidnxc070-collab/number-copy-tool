@@ -1,45 +1,21 @@
-<!DOCTYPE html>
-<html lang="bn">
-<head>
-  <meta charset="UTF-8">
-  <title>নাম্বার কপি টুল</title>
-  <style>
-    body { background: #0f0f23; color: #fff; font-family: sans-serif; text-align: center; padding: 30px; }
-    input, button { padding: 10px; margin: 10px; font-size: 18px; }
-    .number-list { margin-top: 20px; max-height: 300px; overflow-y: scroll; }
-    .number-item { background: #2c2c3c; padding: 8px; margin: 5px; border-radius: 4px; }
-  </style>
-</head>
-<body>
-  <h2>নাম্বার ইনপুট করুন</h2>
-  <input type="number" id="baseNumber" placeholder="উদাহরণ: 51944093400">
-  <button onclick="generateNumbers()">নাম্বার তৈরি করুন</button>
-
-  <h3>মোট নাম্বার: <span id="total">0</span></h3>
-  <div class="number-list" id="list"></div>
-
-  <script>
-    function generateNumbers() {
-      const base = document.getElementById('baseNumber').value;
-      const total = 100;
-      const list = document.getElementById('list');
-      list.innerHTML = '';
-      for (let i = 0; i < total; i++) {
-        const number = (parseInt(base) + i).toString();
-        const div = document.createElement('div');
-        div.className = 'number-item';
-        div.innerHTML = `${number} <button onclick="copyNumber('${number}')">কপি</button>`;
-        list.appendChild(div);
-      }
-      document.getElementById('total').textContent = total;
+function generateNumbers() {
+  const base = document.getElementById('baseNumber').value;
+  const total = 100;
+  const list = document.getElementById('list');
+  list.innerHTML = '';
+  
+  try {
+    let baseNum = BigInt(base);  // এখানে BigInt ব্যবহার করলাম
+    for (let i = 0; i < total; i++) {
+      const number = (baseNum + BigInt(i)).toString();
+      const div = document.createElement('div');
+      div.className = 'number-item';
+      div.innerHTML = `${number} <button onclick="copyNumber('${number}')">কপি</button>`;
+      list.appendChild(div);
     }
+    document.getElementById('total').textContent = total;
+  } catch (e) {
+    alert("অনুগ্রহ করে শুধুমাত্র সংখ্যাসূচক ইনপুট দিন।");
+  }
+}
 
-    function copyNumber(num) {
-      navigator.clipboard.writeText(num).then(() => {
-        const time = new Date().toLocaleTimeString();
-        alert(`Copied: ${num} at ${time}`);
-      });
-    }
-  </script>
-</body>
-</html>
